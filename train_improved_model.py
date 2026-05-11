@@ -1,8 +1,3 @@
-"""
-Improved Neural Network for Polish Handwritten Word Recognition
-Uses ResNet-style blocks with attention mechanism
-"""
-
 import pandas as pd
 import os
 import numpy as np
@@ -37,20 +32,18 @@ print(f"Training on device: {device}\n")
 # Configuration
 CONFIG = {
     'csv_path': 'hpt_dataset.csv',
-    'image_size': (64, 128),  # height, width - words are typically wider
-    'batch_size': 64,
+    'image_size': (48, 96),  # Reduced for CPU (was 64x128)
+    'batch_size': 32,        # Reduced for CPU (was 64)
     'epochs': 100,
     'learning_rate': 0.001,
-    'min_class_samples': 3,  # Minimum samples per class
+    'min_class_samples': 5,  # Increased to reduce classes (was 3)
     'val_split': 0.2,
     'test_split': 0.2,
-    'num_workers': 4,
+    'num_workers': 0,        # Set to 0 for Windows/CPU
 }
 
 
-# ============================================================================
 # Custom Dataset
-# ============================================================================
 
 class HPTDataset(Dataset):
     """Custom dataset for HPT handwritten words"""
@@ -79,9 +72,7 @@ class HPTDataset(Dataset):
         return image, label
 
 
-# ============================================================================
 # Model Architecture
-# ============================================================================
 
 class ResidualBlock(nn.Module):
     """Residual block with batch normalization"""
@@ -206,9 +197,7 @@ class ImprovedHandwritingCNN(nn.Module):
         return x
 
 
-# ============================================================================
 # Data Preparation
-# ============================================================================
 
 def prepare_data(config):
     """Prepare datasets and dataloaders"""
@@ -315,9 +304,7 @@ def prepare_data(config):
     return train_loader, val_loader, test_loader, label_encoder
 
 
-# ============================================================================
 # Training Functions
-# ============================================================================
 
 class EarlyStopping:
     """Early stopping to prevent overfitting"""
@@ -413,7 +400,7 @@ def train_model(model, train_loader, val_loader, config, device):
     optimizer = optim.AdamW(model.parameters(), lr=config['learning_rate'], 
                            weight_decay=1e-4)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, mode='max', patience=5, factor=0.5, verbose=True
+        optimizer, mode='max', patience=5, factor=0.5
     )
     
     early_stopping = EarlyStopping(patience=15, min_delta=0.001, mode='max')
@@ -477,9 +464,7 @@ def train_model(model, train_loader, val_loader, config, device):
     return history
 
 
-# ============================================================================
 # Main
-# ============================================================================
 
 def main():
     # Prepare data

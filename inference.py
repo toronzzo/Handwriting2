@@ -15,10 +15,7 @@ import argparse
 from pathlib import Path
 
 
-# ============================================================================
-# Model Architecture (must match training)
-# ============================================================================
-
+# Model Architecture 
 class ResidualBlock(nn.Module):
     """Residual block with batch normalization"""
     
@@ -129,9 +126,7 @@ class ImprovedHandwritingCNN(nn.Module):
         return x
 
 
-# ============================================================================
 # Inference Functions
-# ============================================================================
 
 class HandwritingRecognizer:
     """Class for handwriting recognition inference"""
@@ -275,9 +270,7 @@ class HandwritingRecognizer:
             plt.show()
 
 
-# ============================================================================
 # Command Line Interface
-# ============================================================================
 
 def main():
     parser = argparse.ArgumentParser(

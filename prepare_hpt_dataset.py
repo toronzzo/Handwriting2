@@ -1,7 +1,4 @@
-"""
-HPT Dataset Preparation Script
-Extracts individual word images from scanned pages using bounding box coordinates
-"""
+#Extracts individual word images from scanned pages using bounding box coordinates
 
 import os
 import pandas as pd
